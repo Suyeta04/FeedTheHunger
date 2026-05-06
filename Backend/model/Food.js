@@ -20,10 +20,17 @@ const foodSchema = new mongoose.Schema({
     },
     status: {
         required: true,
-        type: String
+        type: String,
+        default: "Pending"
     },
     image: {
         required: true,
+        type: String
+    },
+    user_id: {
+        type: String
+    },
+    userFcmToken: {
         type: String
     }
 });

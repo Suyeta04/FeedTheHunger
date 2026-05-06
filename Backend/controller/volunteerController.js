@@ -16,6 +16,8 @@ router.post('/register', async (req, res) => {
   try {
     const { email, name, password, contact, address } = req.body;
 
+    console.log(19, req.body)
+
     const existingVolunteer = await Volunteer.findOne({ email });
     if (existingVolunteer) {
       return res.status(400).json({ message: 'Volunteer already exists with this email' });
@@ -53,7 +55,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
-    const token = jwt.sign({ userId: volunteer._id }, process.env.SECRET_KEY, {
+    const token = jwt.sign({ userId: volunteer._id }, process.env.JWT_SECRET, {
       expiresIn: '1d',
     });
 
