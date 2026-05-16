@@ -1,10 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".User.User_Profile">
+    android:background="#121212">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Profile Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="20dp"
+            android:background="@drawable/card_bg"
+            android:layout_marginBottom="16dp">
+
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/pfp"
+                android:scaleType="centerCrop"
+                android:layout_marginBottom="10dp"/>
+
+            <EditText
+                android:id="@+id/txtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="User Name"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#888888"
+                android:backgroundTint="#FFFFFF"
+                android:padding="10dp"/>
+
+            <EditText
+                android:id="@+id/txtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#888888"
+                android:backgroundTint="#FFFFFF"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"/>
+
+        </LinearLayout>
+
+        <!-- Info Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_bg"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <!-- Contact -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Contact"
+                android:textColor="#AAAAAA"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/edtContact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter contact number"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#888888"
+                android:backgroundTint="#FFFFFF"
+                android:layout_marginBottom="12dp"
+                android:padding="10dp"/>
+
+            <!-- Address -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:textColor="#AAAAAA"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/edtAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter address"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#888888"
+                android:backgroundTint="#FFFFFF"
+                android:padding="10dp"/>
+
+        </LinearLayout>
+
+        <!-- Buttons -->
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Changes"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:backgroundTint="#E53935"
+            android:textColor="#FFFFFF"/>
+
+    </LinearLayout>
+
+</ScrollView>

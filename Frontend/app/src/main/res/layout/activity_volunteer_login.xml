@@ -48,7 +48,8 @@
             android:id="@+id/volunteer_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Password Field -->
@@ -63,19 +64,23 @@
             android:id="@+id/volunteer_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Forgot Password -->
     <TextView
+        android:id="@+id/forgotpass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:text="Forgot Password?"
+        android:textColor="#1976D2"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:padding="12dp"
         android:clickable="true"
         android:focusable="true"
-        android:text="Forgot Password?"
-        android:textColor="#2196F3"
-        android:textSize="14sp" />
+        android:minHeight="48dp"/>
 
     <!-- Login Button -->
     <Button

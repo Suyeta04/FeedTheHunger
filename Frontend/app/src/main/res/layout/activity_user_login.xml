@@ -20,7 +20,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="208dp"
+        android:layout_height="190dp"
         app:srcCompat="@drawable/food" />
 
     <TextView
@@ -70,17 +70,19 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/user_forgot_pass"
+        android:id="@+id/UserForgot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
+        android:padding="12dp"
         android:text="Forgot Password?"
-        android:textColor="#2196F3"
-        android:textSize="14sp" />
+
+        android:textColor="@color/primary"
+        android:textSize="15sp" />
+
+
 
     <Button
-        android:id="@+id/admin_loginbtn"
+        android:id="@+id/Loginbtn"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="56dp"

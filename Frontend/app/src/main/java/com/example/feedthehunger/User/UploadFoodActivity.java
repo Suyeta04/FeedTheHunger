@@ -1,6 +1,7 @@
-package com.example.feedthehunger.Volunteer;
+package com.example.feedthehunger.User;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.feedthehunger.ApiClient;
 import com.example.feedthehunger.ApiService;
+import com.example.feedthehunger.R;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,9 +46,8 @@ public class UploadFoodActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_uploadfood); // Ensure this matches your updated XML file name
+        setContentView(R.layout.activity_upload);
 
-        // Initialize Views
         up_food_type = findViewById(R.id.up_food_type);
         up_description = findViewById(R.id.up_description);
         up_address = findViewById(R.id.up_address);
@@ -53,16 +55,23 @@ public class UploadFoodActivity extends AppCompatActivity {
         upload_imagebtn = findViewById(R.id.upload_imagebtn);
         submit_foodbtn = findViewById(R.id.submit_foodbtn);
 
-        // Choose Image
         upload_imagebtn.setOnClickListener(v -> chooseImage());
 
-        // Submit Data + Image
         submit_foodbtn.setOnClickListener(v -> {
-            if (imageUri != null) {
-                uploadFoodData(imageUri);
-            } else {
+            if (imageUri == null) {
                 Toast.makeText(this, "Please select an image first", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            String userFcmToken = task.getResult();
+                            uploadFoodData(imageUri, userFcmToken);
+                        } else {
+                            Toast.makeText(this, "FCM token error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
     }
 
@@ -83,7 +92,7 @@ public class UploadFoodActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadFoodData(Uri imageUri) {
+    private void uploadFoodData(Uri imageUri, String userFcmToken) {
         try {
             File file = new File(getRealPathFromURI(imageUri));
 
@@ -96,26 +105,42 @@ public class UploadFoodActivity extends AppCompatActivity {
             RequestBody requestFile = RequestBody.create(MediaType.parse(mimeType), file);
             MultipartBody.Part imagePart = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 
-            // Text parts
             RequestBody foodTypePart = RequestBody.create(
-                    MediaType.parse("text/plain"), up_food_type.getText().toString().trim()
+                    MediaType.parse("text/plain"),
+                    up_food_type.getText().toString().trim()
             );
 
             RequestBody descriptionPart = RequestBody.create(
-                    MediaType.parse("text/plain"), up_description.getText().toString().trim()
+                    MediaType.parse("text/plain"),
+                    up_description.getText().toString().trim()
             );
 
             RequestBody addressPart = RequestBody.create(
-                    MediaType.parse("text/plain"), up_address.getText().toString().trim()
+                    MediaType.parse("text/plain"),
+                    up_address.getText().toString().trim()
             );
 
+            SharedPreferences sp = getSharedPreferences("UserData", MODE_PRIVATE);
+            String userIdValue = sp.getString("user_id", "");
 
-            // Retrofit API call
+            RequestBody userIdPart = RequestBody.create(
+                    MediaType.parse("text/plain"),
+                    userIdValue
+            );
+
+            RequestBody tokenPart = RequestBody.create(
+                    MediaType.parse("text/plain"),
+                    userFcmToken
+            );
+
             ApiService service = ApiClient.getClient().create(ApiService.class);
+
             Call<ResponseBody> call = service.uploadFood(
                     foodTypePart,
                     descriptionPart,
                     addressPart,
+                    userIdPart,
+                    tokenPart,
                     imagePart
             );
 
@@ -127,17 +152,23 @@ public class UploadFoodActivity extends AppCompatActivity {
                             String jsonString = response.body().string();
                             JSONObject jsonObject = new JSONObject(jsonString);
 
-                            String uploadedType = jsonObject.optString("food_type", "Food");
                             Toast.makeText(UploadFoodActivity.this,
-                                    uploadedType + " details & image uploaded successfully!",
+                                    "Food details & image uploaded successfully!",
                                     Toast.LENGTH_LONG).show();
 
-                            Log.i("UPLOAD", "✅ " + uploadedType + " details & Image uploaded successfully!");
+                            Log.i("UPLOAD", "Food uploaded: " + jsonObject.toString());
+
+                            up_food_type.setText("");
+                            up_description.setText("");
+                            up_address.setText("");
+                            iv_food_image.setImageDrawable(null);
+                            UploadFoodActivity.this.imageUri = null;
+
                         } catch (IOException | JSONException e) {
                             Log.e("UPLOAD", "Error parsing success response: " + e.getMessage());
                         }
                     } else {
-                        Log.e("UPLOAD", "❌ Server error: " + response.code());
+                        Log.e("UPLOAD", "Server error: " + response.code());
                         Toast.makeText(UploadFoodActivity.this,
                                 "Server error: " + response.code(),
                                 Toast.LENGTH_SHORT).show();
@@ -146,7 +177,7 @@ public class UploadFoodActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Log.e("UPLOAD", "❌ Upload failed: " + t.getMessage());
+                    Log.e("UPLOAD", "Upload failed: " + t.getMessage());
                     Toast.makeText(UploadFoodActivity.this,
                             "Upload failed: " + t.getMessage(),
                             Toast.LENGTH_SHORT).show();
@@ -160,8 +191,9 @@ public class UploadFoodActivity extends AppCompatActivity {
     }
 
     private String getRealPathFromURI(Uri uri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+
         if (cursor != null) {
             int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
@@ -169,6 +201,7 @@ public class UploadFoodActivity extends AppCompatActivity {
             cursor.close();
             return path;
         }
+
         return null;
     }
 }

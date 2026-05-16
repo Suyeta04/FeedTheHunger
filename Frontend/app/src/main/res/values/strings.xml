@@ -1,3 +1,11 @@
 <resources>
+
     <string name="app_name">FeedTheHunger</string>
+
+    <string name="contact">Contact</string>
+    <string name="contact_value">9876543210</string>
+
+    <string name="address">Address</string>
+    <string name="address_value">Kolkata, India</string>
+
 </resources>

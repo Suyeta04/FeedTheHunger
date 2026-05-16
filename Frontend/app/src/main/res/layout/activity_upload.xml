@@ -1,10 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Volunteer.Upload">
+    android:background="#FFFDE7"
+    android:id="@+id/main">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Food Details"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#33691E"
+            android:layout_gravity="center"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Card Container for Inputs -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            card_view:cardCornerRadius="16dp"
+            card_view:cardElevation="6dp"
+            android:backgroundTint="#FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Food Type -->
+                <EditText
+                    android:id="@+id/up_food_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Food Type"
+                    android:drawablePadding="10dp"
+                    android:backgroundTint="#AED581"
+                    android:padding="14dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Description -->
+                <EditText
+                    android:id="@+id/up_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:hint="Description"
+                    android:gravity="top|start"
+                    android:inputType="textMultiLine"
+                    android:scrollbars="vertical"
+                    android:backgroundTint="#AED581"
+                    android:padding="14dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Address -->
+                <EditText
+                    android:id="@+id/up_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Address"
+                    android:drawablePadding="10dp"
+                    android:backgroundTint="#AED581"
+                    android:padding="14dp"
+                    android:layout_marginBottom="10dp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Image Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp">
+
+            <ImageView
+                android:id="@+id/iv_food_image"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_marginBottom="12dp"
+                android:scaleType="centerCrop"
+                android:background="#E0E0E0" />
+
+            <Button
+                android:id="@+id/upload_imagebtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose Image"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#558B2F"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
+                android:layout_gravity="center" />
+        </LinearLayout>
+
+        <!-- Submit Button -->
+        <Button
+            android:id="@+id/submit_foodbtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Upload Food"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#2E7D32"
+            android:padding="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp" />
+
+    </LinearLayout>
+</ScrollView>

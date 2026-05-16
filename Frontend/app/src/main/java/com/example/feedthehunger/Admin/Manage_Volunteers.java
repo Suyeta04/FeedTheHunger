@@ -1,26 +1,63 @@
 package com.example.feedthehunger.Admin;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.feedthehunger.ApiClient;
+import com.example.feedthehunger.ApiService;
 import com.example.feedthehunger.R;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Manage_Volunteers extends AppCompatActivity {
+
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_manage_volunteers);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        recyclerView = findViewById(R.id.volunteerRecycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        loadVolunteers();
+    }
+
+    private void loadVolunteers() {
+
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+
+        Call<List<VolunteerModel>> call = apiService.getAllVolunteers();
+
+        call.enqueue(new Callback<List<VolunteerModel>>() {
+            @Override
+            public void onResponse(Call<List<VolunteerModel>> call, Response<List<VolunteerModel>> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+
+                    VolunteerAdapter adapter =
+                            new VolunteerAdapter(Manage_Volunteers.this, response.body());
+
+                    recyclerView.setAdapter(adapter);
+
+                } else {
+                    Toast.makeText(Manage_Volunteers.this, "No Data", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<VolunteerModel>> call, Throwable t) {
+                Toast.makeText(Manage_Volunteers.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }

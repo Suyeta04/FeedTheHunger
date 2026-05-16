@@ -1,26 +1,54 @@
 package com.example.feedthehunger.User;
 
-import android.os.Bundle;
+public class ReportModel {
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+    private String _id;
+    private String food_type;
+    private String description;
+    private String address;
+    private String status;
+    private String image;
+    private String upload_date_time;
 
-import com.example.feedthehunger.R;
+    public ReportModel() {
+    }
 
-public class ReportModel extends AppCompatActivity {
+    public ReportModel(String _id, String food_type, String description,
+                       String address, String status, String image, String upload_date_time) {
+        this._id = _id;
+        this.food_type = food_type;
+        this.description = description;
+        this.address = address;
+        this.status = status;
+        this.image = image;
+        this.upload_date_time = upload_date_time;
+    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_report_model);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+    public String get_id() {
+        return _id;
+    }
+
+    public String getFood_type() {
+        return food_type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getUpload_date_time() {
+        return upload_date_time;
     }
 }

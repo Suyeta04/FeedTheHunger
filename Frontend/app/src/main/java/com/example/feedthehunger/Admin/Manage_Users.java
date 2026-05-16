@@ -1,26 +1,63 @@
 package com.example.feedthehunger.Admin;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.feedthehunger.ApiClient;
+import com.example.feedthehunger.ApiService;
 import com.example.feedthehunger.R;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Manage_Users extends AppCompatActivity {
+
+    RecyclerView userRecycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_manage_users);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        userRecycler = findViewById(R.id.userRecycler);
+        userRecycler.setLayoutManager(new LinearLayoutManager(this));
+
+        loadUsers();
+    }
+
+    private void loadUsers() {
+
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+
+        Call<List<UserModel>> call = apiService.getAllUsers();
+
+        call.enqueue(new Callback<List<UserModel>>() {
+            @Override
+            public void onResponse(Call<List<UserModel>> call, Response<List<UserModel>> response) {
+
+                if (response.isSuccessful()) {
+
+                    List<UserModel> users = response.body();
+
+                    UserAdapter adapter = new UserAdapter(Manage_Users.this, users);
+                    userRecycler.setAdapter(adapter);
+
+                } else {
+                    Toast.makeText(Manage_Users.this, "No users found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UserModel>> call, Throwable t) {
+                Toast.makeText(Manage_Users.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
         });
     }
 }

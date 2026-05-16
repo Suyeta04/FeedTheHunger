@@ -19,7 +19,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.feedthehunger.MyIP;
 import com.example.feedthehunger.R;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,14 +59,19 @@ public class Volunteer_Registration_Activity extends AppCompatActivity {
         vol_regisbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = vol_name.getText().toString();
-                String email = vol_email.getText().toString();
-                String password = vol_pass.getText().toString();
-                String contact = vol_contact.getText().toString();
-                String location = vol_location.getText().toString();
 
-                // ⚠️ Update your server's IP here
-                String url = "http://192.168.0.177:3000/volunteer/register";
+                String name = vol_name.getText().toString().trim();
+                String email = vol_email.getText().toString().trim();
+                String password = vol_pass.getText().toString().trim();
+                String contact = vol_contact.getText().toString().trim();
+                String location = vol_location.getText().toString().trim();
+
+                if (name.isEmpty() || email.isEmpty() || password.isEmpty() || contact.isEmpty() || location.isEmpty()) {
+                    Toast.makeText(Volunteer_Registration_Activity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String url = MyIP.IP_ADDRESS+ "volunteer/register";
 
                 insertVolunteerData(url, name, email, password, contact, location);
             }
@@ -72,6 +79,7 @@ public class Volunteer_Registration_Activity extends AppCompatActivity {
     }
 
     private void insertVolunteerData(String url, String name, String email, String password, String contact, String location) {
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please wait...");
         progressDialog.setCancelable(false);
@@ -80,27 +88,44 @@ public class Volunteer_Registration_Activity extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
                     progressDialog.dismiss();
+
                     try {
                         JSONObject jsonObject = new JSONObject(response);
-                        if (jsonObject.has("_id")) {
-                            Toast.makeText(getApplicationContext(), "✅ Volunteer Registered", Toast.LENGTH_LONG).show();
+
+                        if (jsonObject.has("volunteer")) {
+
+                            Toast.makeText(getApplicationContext(), "Volunteer Registered Successfully", Toast.LENGTH_LONG).show();
+
+                            FirebaseMessaging.getInstance()
+                                    .subscribeToTopic("volunteers")
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(this, "Subscribed to volunteer notifications", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(this, "Notification subscription failed", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
                             vol_name.setText("");
                             vol_email.setText("");
                             vol_pass.setText("");
                             vol_contact.setText("");
                             vol_location.setText("");
+
                         } else {
-                            Toast.makeText(getApplicationContext(), "❌ Registration failed", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_LONG).show();
                         }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "❌ Error parsing server response", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Error parsing server response", Toast.LENGTH_LONG).show();
                     }
                 },
                 error -> {
                     progressDialog.dismiss();
                     Toast.makeText(Volunteer_Registration_Activity.this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
                 }) {
+
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -109,10 +134,8 @@ public class Volunteer_Registration_Activity extends AppCompatActivity {
                 params.put("password", password);
                 params.put("contact", contact);
                 params.put("location", location);
-
                 return params;
             }
-
         };
 
         RequestQueue queue = Volley.newRequestQueue(this);

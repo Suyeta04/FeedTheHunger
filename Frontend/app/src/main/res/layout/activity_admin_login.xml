@@ -50,7 +50,8 @@
             android:id="@+id/admin_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:inputType="text"
+            android:textColor="@color/black" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -65,21 +66,26 @@
             android:id="@+id/admin_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColor="@color/black" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
+        android:id="@+id/forgotpass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Forgot Password?"
+        android:textColor="#1976D2"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:padding="12dp"
         android:clickable="true"
         android:focusable="true"
-        android:text="Forgot Password?"
-        android:textColor="#2196F3"
-        android:textSize="40dp" />
+        android:minHeight="48dp"/>
 
     <Button
-        android:id="@+id/admin_loginbtn"
+        android:id="@+id/Loginbtn"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="56dp"

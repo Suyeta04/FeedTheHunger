@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "884559848382",
+    "project_id": "feed-the-hunger-381cc",
+    "storage_bucket": "feed-the-hunger-381cc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884559848382:android:4c010bdb73d8b869600fef",
+        "android_client_info": {
+          "package_name": "com.example.feedthehunger"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS0GNmtJx1iDIR-wiuwzfvCNjn20c1qq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
